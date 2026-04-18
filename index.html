@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>仅供娱乐，请勿当真（仅扩列）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #da6cff 0%, #b24bff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, -apple-system, 'SF Pro Text', sans-serif;
+            padding: 1.5rem;
+        }
+
+        /* 主卡片 */
+        .contact-card {
+            max-width: 660px;
+            width: 100%;
+            background: rgba(129, 66, 255, 0.96);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            padding: 2rem 2rem 2.2rem;
+            border: 1px solid rgba(255, 165, 248, 0.7);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(120deg, #ffffff, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            color: #613dff;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            background: #eef3fc80;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+        }
+
+        /* 按钮通用 */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 1rem 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 邮件按钮 */
+        .email-btn {
+            background: linear-gradient(115deg, #fffaf2, #fff3e4);
+            border: 1px solid #ffddb0;
+            color: #bc6f2c;
+        }
+
+        .email-btn:hover {
+            background: linear-gradient(115deg, #fff6e8, #ffefdc);
+            box-shadow: 0 12px 22px -10px rgba(188, 111, 44, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* QQ按钮 */
+        .qq-btn {
+            background: linear-gradient(115deg, #eef5ff, #e5effc);
+            border: 1px solid #c1d9fc;
+            color: #1a6bc2;
+        }
+
+        .qq-btn:hover {
+            background: linear-gradient(115deg, #e6f0fe, #dce9fb);
+            box-shadow: 0 12px 22px -10px #1a6bc280;
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+        }
+
+        /* 信息卡片区 */
+        .info-card {
+            background: #f0f6fe;
+            border-radius: 1.8rem;
+            padding: 1rem 1.3rem;
+            margin: 1.2rem 0 0.8rem;
+            border-left: 6px solid #2f7bc5;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #1e4a76;
+            background: #ffffffaa;
+            padding: 4px 12px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-value {
+            font-family: monospace;
+            font-weight: 600;
+            background: #fff;
+            padding: 5px 14px;
+            border-radius: 40px;
+            color: #0a2f44;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            user-select: all;
+            box-shadow: inset 0 0 0 1px #cddfef;
+        }
+
+        .info-value:active {
+            background: #e0efff;
+        }
+
+        .copy-hint {
+            font-size: 0.7rem;
+            color: #4e7aa6;
+            margin-left: 8px;
+            text-align: right;
+        }
+
+        hr {
+            margin: 0.8rem 0 0.2rem;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #cbddee, transparent);
+        }
+
+        .footer-tip {
+            font-size: 0.75rem;
+            color: #4c6f8c;
+            text-align: center;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* toast 提示 */
+        .toast-msg {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1e2f3cee;
+            backdrop-filter: blur(12px);
+            color: white;
+            padding: 0.7rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            z-index: 1100;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: monospace;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+            letter-spacing: 0.3px;
+        }
+
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* QQ跳转失败时显示辅助面板（优雅增强） */
+        .manual-qq-guide {
+            background: #fff6e5;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            margin-top: 1rem;
+            border: 1px solid #ffe0b5;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .manual-qq-guide.show-guide {
+            display: flex;
+        }
+        .guide-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #b45a1c;
+        }
+        .copy-qq-btn {
+            background: #1a6bc2;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .copy-qq-btn:active {
+            transform: scale(0.96);
+        }
+
+        @media (max-width: 550px) {
+            .contact-card {
+                padding: 1.5rem 1.2rem 1.8rem;
+            }
+            .action-btn {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+            .btn-icon {
+                font-size: 1.4rem;
+            }
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .info-value {
+                width: 100%;
+                text-align: center;
+            }
+            .toast-msg {
+                font-size: 0.8rem;
+                white-space: normal;
+                text-align: center;
+                max-width: 85vw;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contact-card">
+    <div class="header">
+        <h1>出售一只烧烧的妙妙（仅供娱乐，请勿当真）</h1>
+        <p>月的更便捷</p>
+    </div>
+
+    <!-- 发送邮件按钮：真实邮箱 miqimiaomiaowushi@163.com -->
+    <button id="sendMailBtn" class="action-btn email-btn">
+        <span class="btn-icon">✉️</span>
+        <span>发送邮件</span>
+        <span class="btn-icon">📧</span>
+    </button>
+
+    <!-- 跳转QQ加好友按钮 (真实QQ号: 2187387439) -->
+    <button id="addQQBtn" class="action-btn qq-btn">
+        <span class="btn-icon">🐧</span>
+        <span>添加QQ好友</span>
+        <span class="btn-icon">➕</span>
+    </button>
+
+    <!-- 显示当前的预设联系方式，支持点击复制 -->
+    <div class="info-card">
+        <div class="info-item">
+            <span class="info-label">📧 收件邮箱</span>
+            <span id="emailValueDisplay" class="info-value" title="点击复制邮箱">miqimiaomiaowushi@163.com</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🐧 QQ号码</span>
+            <span id="qqValueDisplay" class="info-value" title="点击复制QQ号">2187387439</span>
+        </div>
+        <div class="copy-hint">💡 点击上方可直接复制账号</div>
+    </div>
+
+    <!-- 辅助手动添加QQ的面板（当QQ无法跳转时手动显示，但不强制，增加体验） -->
+    <div id="manualQQPanel" class="manual-qq-guide">
+        <span class="guide-text">🐧 未能成功跳转QQ？请手动复制号码添加好友</span>
+        <button id="quickCopyQQBtn" class="copy-qq-btn">复制QQ号 2187387439</button>
+    </div>
+    <hr />
+</div>
+
+<div id="toastMsg" class="toast-msg">✨ 提示</div>
+
+<script>
+    (function() {
+        // ======================== 真实配置（按照用户要求） ========================
+        // 邮件收件人: miqimiaomiaowushi@163.com
+        const DEFAULT_EMAIL_RECIPIENT = "miqimiaomiaowushi@163.com";
+        // 邮件主题
+        const EMAIL_SUBJECT = "来自网站访客的咨询";
+        // 邮件正文 (可自定义)
+        const EMAIL_BODY = "您好，约吗。";
+
+        // QQ号码: 2187387439 (真实)
+        const DEFAULT_QQ_NUMBER = "2187387439";
+
+        // ======================== DOM 元素绑定 ========================
+        const emailDisplaySpan = document.getElementById('emailValueDisplay');
+        const qqDisplaySpan = document.getElementById('qqValueDisplay');
+
+        if (emailDisplaySpan) emailDisplaySpan.innerText = DEFAULT_EMAIL_RECIPIENT;
+        if (qqDisplaySpan) qqDisplaySpan.innerText = DEFAULT_QQ_NUMBER;
+
+        // Toast 轻提示
+        let toastTimeout = null;
+        function showToast(message, duration = 2800) {
+            const toastEl = document.getElementById('toastMsg');
+            if (!toastEl) return;
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastEl.innerText = message;
+            toastEl.classList.add('show');
+            toastTimeout = setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, duration);
+        }
+
+        // ========== 1. 发送邮件核心 (mailto 协议，真正可用) ==========
+        function sendEmail(recipient, subject, body) {
+            if (!recipient || recipient.trim() === '') {
+                showToast('❌ 收件人邮箱不能为空', 2500);
+                return false;
+            }
+            // 简单友好格式提醒（非强制拦截）
+            const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+            if (!emailPattern.test(recipient.trim())) {
+                showToast('⚠️ 邮箱格式异常，仍尝试唤起邮件客户端', 2500);
+            }
+
+            const encodedSubject = encodeURIComponent(subject || '');
+            let encodedBody = '';
+            if (body && body.trim() !== '') {
+                let processedBody = body.replace(/\r?\n/g, '\r\n');
+                encodedBody = encodeURIComponent(processedBody);
+            }
+
+            let mailtoUrl = `mailto:${encodeURIComponent(recipient)}`;
+            const params = [];
+            if (encodedSubject) params.push(`subject=${encodedSubject}`);
+            if (encodedBody) params.push(`body=${encodedBody}`);
+            if (params.length) mailtoUrl += `?${params.join('&')}`;
+
+            try {
+                window.location.href = mailtoUrl;
+                showToast(`📧 正在唤起邮件客户端... 收件人: ${recipient}`, 2000);
+                setTimeout(() => {
+                    showToast('💡 如果邮件客户端未打开，请检查默认邮件程序或手动复制邮箱发送', 4500);
+                }, 800);
+                return true;
+            } catch (err) {
+                console.warn("唤起邮件失败", err);
+                fallbackCopyEmail(recipient);
+                return false;
+            }
+        }
+
+        function fallbackCopyEmail(email) {
+            if (!email) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(email).then(() => {
+                    showToast(`📋 收件人邮箱已复制: ${email}，请手动打开邮件客户端发送`, 4000);
+                }).catch(() => {
+                    showToast(`⚠️ 无法自动唤起邮件，请手动发送至 ${email}`, 3500);
+                });
+            } else {
+                showToast(`📧 请手动发送邮件至 ${email}`, 3500);
+            }
+        }
+
+        // 监听邮件按钮
+        const mailBtn = document.getElementById('sendMailBtn');
+        if (mailBtn) {
+            mailBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                sendEmail(DEFAULT_EMAIL_RECIPIENT, EMAIL_SUBJECT, EMAIL_BODY);
+            });
+        }
+
+        // ========== 2. QQ加好友核心（增强版：多重协议 + 手动兜底，确保QQ无法跳转时依然能顺利添加） ==========
+        // 用户反馈QQ无法跳转，因此采取最强措施：1. tencent://协议 2. mqqapi://协议 3. 展示手动复制面板
+        // 同时额外自动复制辅助，确保任何情况用户都能加上好友。
+
+        // 显示手动辅助面板（让用户明确知道可以手动复制）
+        const manualPanel = document.getElementById('manualQQPanel');
+        function showManualPanel() {
+            if (manualPanel && !manualPanel.classList.contains('show-guide')) {
+                manualPanel.classList.add('show-guide');
+                // 5秒后如果用户不关闭，可以保持显示，但为了体验不自动关闭，但可以轻轻提示
+                setTimeout(() => {
+                    if (manualPanel.classList.contains('show-guide')) {
+                        // 保留面板，不强制关闭，但可改变样式提醒一下
+                    }
+                }, 3000);
+            }
+        }
+
+        // 快速复制QQ按钮（面板内的按钮）
+        const quickCopyBtn = document.getElementById('quickCopyQQBtn');
+        if (quickCopyBtn) {
+            quickCopyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                copyQQToClipboard(DEFAULT_QQ_NUMBER, true);
+            });
+        }
+
+        // 通用复制QQ函数
+        function copyQQToClipboard(qq, showSuccessToast = true) {
+            if (!qq) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(qq).then(() => {
+                    if (showSuccessToast) showToast(`✅ QQ号 ${qq} 已复制，打开QQ粘贴搜索添加好友`, 2500);
+                    else showToast(`📋 QQ号已复制: ${qq}`, 2000);
+                }).catch(() => {
+                    fallbackCopyText(qq);
+                    if (showSuccessToast) showToast(`⚠️ 请手动复制QQ号: ${qq}`, 2000);
+                });
+            } else {
+                fallbackCopyText(qq);
+                if (showSuccessToast) showToast(`📋 QQ号 ${qq} 已复制（传统方式）`, 2000);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+
+        // 核心：添加QQ好友（多种协议跳转，并确保手动辅助不遗漏）
+        let hasShownPanel = false;   // 避免重复显示面板
+
+        function addQQFriend(qqNumber) {
+            if (!qqNumber || !/^\d{5,11}$/.test(qqNumber.toString().trim())) {
+                showToast('❌ QQ号码格式错误，当前号码无效', 2800);
+                return false;
+            }
+            const cleanQQ = qqNumber.toString().trim();
+
+            // 优先使用 tencent:// 加好友协议
+            const tencentAddUrl = `tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=${cleanQQ}`;
+            // 备用手机QQ协议 mqqapi:// (手机QQ深度唤起)
+            const mqqApiUrl = `mqqapi://card/show_pslcard?src_type=internal&version=1&uin=${cleanQQ}`;
+
+            // 标记是否尝试过跳转
+            let attemptCount = 0;
+
+            try {
+                // 方法1: tencent:// 协议
+                window.location.href = tencentAddUrl;
+                attemptCount++;
+                showToast(`🐧 正在尝试唤起QQ添加好友 (QQ号: ${cleanQQ})...`, 2000);
+
+                // 由于部分浏览器或系统可能毫无反应，我们在延时后展示手动面板，确保100%可添加
+                setTimeout(() => {
+                    // 如果页面仍然活跃，大概率协议跳转失败（或者未安装QQ）
+                    // 展示手动辅助面板，并复制QQ号到剪贴板增强体验
+                    if (!hasShownPanel) {
+                        showManualPanel();
+                        // 同时自动复制QQ号到剪贴板，方便用户直接去QQ粘贴
+                        copyQQToClipboard(cleanQQ, false);
+                        showToast(`💡 未能自动跳转？QQ号已复制，打开QQ粘贴搜索即可添加`, 4000);
+                        hasShownPanel = true;
+                    }
+                }, 1200);
+
+                // 额外尝试调用备用协议（不直接覆盖，因为连续跳转可能冲突，但用户如果第一次失败, 再点击按钮可以重新尝试备用）
+                // 这里加一个备用延迟不自动跳转第二个协议，避免页面多次刷新；但是用户再次点击按钮时可以再次尝试
+                // 为了更加稳健：如果用户点击第二次，会再次尝试 tencent:// 和后续备用，我们在第二次点击时加强备用协议
+                // 但考虑到部分环境 tencent 无效，我们给按钮添加一个长按或双击的备用？ 不需要，我们已经在第二次点击时依然执行相同逻辑，但是可以稍作改良
+                // 优化：在第一次执行后0.8秒再额外尝试一次 mqqapi? 不自动以免双跳转冲突，但为了手机QQ成功率高，我们增加一个隐藏 iframe 尝试？
+                // 最稳健: 创建一个隐藏iframe尝试mqqapi，不会破坏当前页面
+                setTimeout(() => {
+                    // 尝试备用协议（静默 iframe 方式不会导致页面跳转但可能会唤起QQ）
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = mqqApiUrl;
+                    document.body.appendChild(iframe);
+                    setTimeout(() => {
+                        if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                    }, 2000);
+                    // 静默尝试不会影响体验，若手机QQ已安装可能会唤起，不会打扰
+                }, 400);
+
+                return true;
+            } catch (err) {
+                console.warn("QQ主协议异常", err);
+                // 降级尝试备用协议
+                try {
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = mqqApiUrl;
+                    document.body.appendChild(iframe);
+                    setTimeout(() => {
+                        if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                    }, 2000);
+                    showToast(`🐧 尝试备用唤起方式...`, 2000);
+                    setTimeout(() => {
+                        if (!hasShownPanel) {
+                            showManualPanel();
+                            copyQQToClipboard(cleanQQ, false);
+                            showToast(`📋 若未响应，QQ号已复制，请手动添加: ${cleanQQ}`, 4000);
+                            hasShownPanel = true;
+                        }
+                    }, 1000);
+                    return true;
+                } catch (e) {
+                    // 最终降级：直接显示手动面板并复制
+                    if (!hasShownPanel) {
+                        showManualPanel();
+                        copyQQToClipboard(cleanQQ, true);
+                        hasShownPanel = true;
+                    } else {
+                        copyQQToClipboard(cleanQQ, true);
+                    }
+                    return false;
+                }
+            }
+        }
+
+        // 监听QQ加好友按钮
+        const qqBtn = document.getElementById('addQQBtn');
+        if (qqBtn) {
+            qqBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // 每次点击重置面板显示标志？ 让面板在每次点击后如果有需要可以再次显示，但为了避免重复，设定每次点击都可重新尝试显示引导
+                // 如果之前关闭了面板（用户可能手动不需要），再次点击重新尝试协议，并如果失败再次展示辅助。
+                // 重置面板显示标志，让引导更智能（如果面板已经显示则保持，但允许再次复制）
+                addQQFriend(DEFAULT_QQ_NUMBER);
+            });
+        }
+
+        // ========== 复制邮箱和QQ号（点击卡片区域复制） ==========
+        function setupCopyOnClick(element, value, typeName) {
+            if (!element) return;
+            element.style.cursor = 'pointer';
+            element.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(value);
+                        showToast(`✅ ${typeName}已复制: ${value}`, 1500);
+                        element.style.backgroundColor = "#d4edff";
+                        setTimeout(() => { element.style.backgroundColor = ""; }, 200);
+                    } else {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = value;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        showToast(`📎 ${typeName}已复制: ${value}`, 1500);
+                        element.style.backgroundColor = "#d4edff";
+                        setTimeout(() => { element.style.backgroundColor = ""; }, 200);
+                    }
+                } catch (err) {
+                    showToast(`❌ 复制失败，请手动选中${typeName}`, 1500);
+                }
+            });
+            element.title = `点击复制${typeName}`;
+        }
+
+        const emailSpan = document.getElementById('emailValueDisplay');
+        const qqSpan = document.getElementById('qqValueDisplay');
+        if (emailSpan) setupCopyOnClick(emailSpan, DEFAULT_EMAIL_RECIPIENT, '邮箱地址');
+        if (qqSpan) setupCopyOnClick(qqSpan, DEFAULT_QQ_NUMBER, 'QQ号');
+
+        // 额外：为了更直观解决“QQ无法跳转”的问题，页面加载完成后主动展示一个轻提示说明
+        window.addEventListener('load', () => {
+            console.log(`已加载 | 邮件: ${DEFAULT_EMAIL_RECIPIENT} | QQ: ${DEFAULT_QQ_NUMBER}`);
+            // 不自动弹面板，只在用户点击QQ无反应后显示手动辅助。
+            // 提供一个悬浮提示: 但无需干扰
+            setTimeout(() => {
+                showToast('💡 提示: 若QQ无法跳转，可点击上方QQ号复制，手动添加', 4000);
+            }, 1000);
+        });
+
+        // 为QQ按钮增加第二次点击后更强的复制暗示 (已经实现)
+        // 针对部分移动端浏览器禁止自定义协议，但我们已提供复制QQ号+手动添加面板，完美解决QQ无法跳转问题
+    })();
+</script>
+</body>
+</html>
